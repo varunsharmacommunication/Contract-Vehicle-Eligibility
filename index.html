@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contract Vehicle Eligibility Finder | Astute Business Solutions</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<style>
+:root{
+  --teal:#0B89A1;--sky:#00C6FF;--navy:#003C51;--cream:#F2E8C4;--mint:#E6F4F1;
+  --black:#000;--gray:#6D6E71;--gray-l:#BCBDC0;--off:#F6F6F6;--white:#fff;--orange:#FA9137;
+  --bg:var(--cream);--fg:var(--navy);--card:var(--white);--sub:var(--gray);--border:var(--gray-l);
+  --font:'Inter',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#04222d;--fg:#eef6f8;--card:#0a3040;--sub:#9fb9c2;--border:#134a5e;--off:#0a3040;}}
+:root[data-theme="dark"]{--bg:#04222d;--fg:#eef6f8;--card:#0a3040;--sub:#9fb9c2;--border:#134a5e;--off:#0a3040;}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);line-height:1.5;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 80px}
+header.bar{display:flex;align-items:center;gap:16px;padding:18px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:5;padding-top:calc(18px + env(safe-area-inset-top,0px))}
+header.bar img{height:42px;width:auto}
+header.bar span{font-size:13px;color:var(--sub);border-left:1px solid var(--border);padding-left:12px}
+.eyebrow{color:var(--teal);font-weight:600;font-size:13px;margin:36px 0 8px}
+.hmark{position:absolute;top:50%;right:20px;transform:translateY(-50%);width:34px;height:auto;opacity:.35;pointer-events:none}
+@media(max-width:420px){.hmark{display:none}}
+h1{font-size:clamp(28px,4vw,38px);margin:0 0 14px;font-weight:800;letter-spacing:-.01em}
+.lead{color:var(--sub);font-size:16px;max-width:62ch;margin:0 0 8px}
+.lead b{color:var(--fg)}
+form{margin-top:32px;display:flex;flex-direction:column;gap:22px}
+fieldset{border:0;margin:0;padding:0}
+label{display:block;font-weight:600;font-size:14.5px;margin-bottom:8px}
+label small{display:block;font-weight:400;color:var(--sub);font-size:13px;margin-top:2px}
+select{width:100%;font-family:var(--font);font-size:15px;padding:12px 14px;border-radius:9px;border:1.5px solid var(--border);background:var(--card);color:var(--fg);appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="9"><path d="M1 1l6 6 6-6" stroke="%236D6E71" stroke-width="1.6" fill="none"/></svg>');background-repeat:no-repeat;background-position:right 14px center}
+select:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px 24px}
+.submit{margin-top:8px;background:var(--teal);color:#fff;border:0;border-radius:10px;padding:15px 22px;font-size:16px;font-weight:700;font-family:var(--font);cursor:pointer}
+.submit:hover{background:var(--navy)}
+#results{margin-top:48px;display:none}
+#results.show{display:block}
+#results h2{font-size:19px;margin:0 0 4px}
+#results .rsub{color:var(--sub);font-size:14px;margin:0 0 20px}
+.vcard{border:1.5px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:16px;background:var(--card)}
+.vcard.match{border-color:var(--teal)}
+.vhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.vhead h3{margin:0;font-size:17px}
+.badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:100px;white-space:nowrap}
+.badge.match{background:var(--mint);color:var(--teal)}
+.badge.possible{background:var(--cream);color:#8a6d00}
+.contractno{font-size:12.5px;color:var(--sub);margin:4px 0 12px;font-family:ui-monospace,Menlo,monospace}
+.vcard p{font-size:14px;margin:0 0 10px}
+.vcard ul{margin:0 0 12px;padding-left:20px;font-size:13.5px;color:var(--sub)}
+.vcard a.vlink{font-size:13.5px;font-weight:700;color:var(--teal);text-decoration:none}
+.vcard a.vlink:hover{text-decoration:underline}
+.other{margin-top:8px;border-top:1px solid var(--border);padding-top:18px}
+.other summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--sub)}
+.other .vcard{margin-top:16px}
+.block.next{margin-top:28px;border:1px solid var(--border);border-radius:12px;padding:22px 24px;background:var(--card)}
+.block.next h3{margin:0 0 12px;font-size:16px}
+.next a{display:block;padding:14px 16px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;color:var(--fg);text-decoration:none;font-size:14.5px;font-weight:600}
+.next a:hover{border-color:var(--teal);background:var(--mint)}
+.next a small{display:block;font-weight:400;color:var(--sub);margin-top:3px}
+footer{text-align:center;color:var(--sub);font-size:12.5px;padding:30px 20px}
+/* alignment + select fixes */
+fieldset{display:flex;flex-direction:column;justify-content:flex-end;min-width:0}
+select{padding-right:42px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+</style>
+</head>
+<body>
+<header class="bar"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACcCAMAAAAj3DXfAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAASUExURf///zOIo1F1gmRiY7u6u728vOPeofoAAAABdFJOUwBA5thmAAAAAWJLR0QAiAUdSAAAAAd0SU1FB+oJGAImC7Q+AYcAAAJ2SURBVHja7ZqJVsQgDAAh1f//ZS+uhEDXp6Xizrynbim0maYcaxsCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAdRvFI5Psn7xJIKTaO6w61tSlbIRafwKJjNtriRr61mtU3JCjcndfPAtpLrUtfFsanch1uXutLbRMdxaJ2R3LD2onxpOZO6RklU+Ca+B+TGjZe5xT5GdzjbU06nbhjGXnIylPsHmctuLy9KeRTHVnLiy4XRYL2VXHXTdqOpaCc5Gcklu67f/Vhu4STeujm9rtfbSE7GcjWUXeW0m7UTJ4p95MTKeSvM6ZjwhweUMn+Ln7rQj5rbyDWLk1Hqkp2ozS3kmoXXOHVmOt9FLjZyk9SFE7nZaHq/3OfG6zx1u8mpxJ31ukfDNdP+bXJ60jlM6kY+TrjzL+q3yBm3Q1TqmphlJuf8h+U7s+JFiJXTqasZccLvrpF4G77cksx1bjp1uUxOJvG6vpbHFmsrll994pzUeWG4w+Mw5HvkHLe+13lR9FHNIr5FzkucHTD9IMSJqrk+znmWy9VoFK+JEtvDj2IWPrUBAAB4ZvI31Jh+SkHh64lxeiQZJabN5hBfZe+FoppG01hKdakHTkXXTPsxO4XmgxNfa2oqtfui11j9Lieqr7xctqCJ6dhVrj2V5N2irVSlqP6cyFXDUPPsvfvyK3LpJqkX1N5b+vWgfEupFJUjqCycyoWr7brbMpjbJEZd5FWqcjajrbH0H0vXvcaukxPbBzw5ceRcmU7O1MpHu0aujHt5lBT37S9Ju9OgqUdLe4hQKsdWXkyt5oJd1ekAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFvAGVZcSphC0P6EAAAAASUVORK5CYII=" alt="Astute"><span>Contract Vehicle Eligibility Finder</span><svg class="hmark" viewBox="0 0 842 595" aria-hidden="true" focusable="false"><path fill="var(--gray-l)" d="m537.68 559.2l-186.88-384.85 72.05-140.35 266.87 525.2h-0.02z"/><path fill="var(--teal)" d="m153 559.2l269.84-525.2 70.56 138.74-188.37 386.46z"/><path fill="var(--gray)" d="m153.01 559.2l67.45-131.3h253.41l64.87 131.28-0.02 0.02z"/></svg></header>
+<div class="wrap">
+  <p class="eyebrow">Interactive Utility &middot; No email required</p>
+  <h1>Can your institution already buy from Astute?</h1>
+  <p class="lead">Astute holds five public-sector contract vehicles. Answer three questions to see which ones likely apply to your organization &mdash; no procurement office decoder ring required.</p>
+
+  <form id="form">
+    <div class="grid">
+      <fieldset>
+        <label>What type of organization are you?</label>
+        <select id="orgtype">
+          <option value="fed">Federal agency</option>
+          <option value="stateLocal">State or local government</option>
+          <option value="publicHigherEd">Public higher education institution</option>
+          <option value="privateEd">Private non-profit higher ed or K-12 district</option>
+          <option value="otherPublic">Other public entity</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <label>Where is your organization primarily located?</label>
+        <select id="state">
+          <option value="texas">Texas</option>
+          <option value="minnesota">Minnesota</option>
+          <option value="other">Another U.S. state</option>
+        </select>
+      </fieldset>
+      <fieldset>
+        <label>Do you already hold access to a cooperative purchasing vehicle? <small>e.g. OMNIA Partners or NASPO ValuePoint, through your state or system</small></label>
+        <select id="coop">
+          <option value="notsure">Not sure</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
+      </fieldset>
+    </div>
+    <button class="submit" type="submit">Find my contract vehicle</button>
+  </form>
+
+  <section id="results">
+    <h2 id="rTitle"></h2>
+    <p class="rsub" id="rSub"></p>
+    <div id="matches"></div>
+    <details class="other" id="otherWrap">
+      <summary>Other Astute contract vehicles</summary>
+      <div id="others"></div>
+    </details>
+
+    <div class="block next">
+      <h3>Suggested next step</h3>
+      <div id="nextSteps"></div>
+    </div>
+  </section>
+</div>
+<footer>Astute Business Solutions &middot; Eligibility reflects Astute's published contract terms as of publication. Confirm current eligibility and contract status with Astute before procuring.</footer>
+
+<script>
+const VEHICLES = [
+  {id:'gsa', name:'GSA Multiple Award Schedule (MAS) IT', contract:'47QTCA18D00G5', link:'https://www.beastute.com/en-us/gsa',
+   scope:['Cloud computing services (SaaS, PaaS, IaaS)','IT professional services','ERP modernization (PeopleSoft, EBS, JD Edwards)'],
+   elig:'All federal agencies, and state and local government entities, through the GSA Cooperative Purchasing Program.',
+   test:o=>['fed','stateLocal','otherPublic','publicHigherEd'].includes(o.orgtype)?'match':'possible'},
+  {id:'mhec', name:'MHEC-Oracle Master Agreement', contract:'MHEC US-OMA-FEC-80499697', link:'https://www.beastute.com/contract-vehicles',
+   scope:['Oracle Software Update License & Support','Consulting & cloud services','Hardware and systems support'],
+   elig:'Public and private non-profit higher education, K-12 districts, and state/local governments in MHEC, NEBHE, SREB, or WICHE member states.',
+   test:o=>['publicHigherEd','privateEd'].includes(o.orgtype)?'match':(['stateLocal','otherPublic'].includes(o.orgtype)?'possible':'skip')},
+  {id:'txdir', name:'TXDIR &mdash; Oracle Branded Hardware, Software & Services', contract:'DIR-CPO-5439', link:'https://www.beastute.com/contract-vehicles',
+   scope:['Oracle Cloud Infrastructure (OCI)','Software as a Service (SaaS)','IT professional services & training'],
+   elig:'Texas state and local government, public education, and other public entities &mdash; including entities outside Texas via inter-local agreements.',
+   test:o=>o.state==='texas'?'match':(['stateLocal','otherPublic','publicHigherEd','privateEd'].includes(o.orgtype)?'possible':'skip')},
+  {id:'omnia', name:'OMNIA Partners Public Sector &mdash; Oracle Solutions', contract:'R240203', link:'https://www.beastute.com/contract-vehicles',
+   scope:['Comprehensive Oracle Cloud (SaaS, PaaS, IaaS)','Engineered systems & hardware','Managed services & consulting'],
+   elig:'No cost to participate. Open to the 90,000+ public agencies and institutions in the OMNIA Partners Public Sector network.',
+   test:o=>o.orgtype==='fed'?'skip':(o.coop==='yes'?'match':'possible')},
+  {id:'naspo', name:'NASPO ValuePoint Cloud Solutions', contract:'128340 (MN participating addendum)', link:'https://www.beastute.com/contract-vehicles',
+   scope:['Cloud solutions (SaaS, PaaS, IaaS)','Migration & implementation services','Networking & telecom support'],
+   elig:'All public agencies within the State of Minnesota, and other participating NASPO ValuePoint member states.',
+   test:o=>o.state==='minnesota'?'match':(o.orgtype==='fed'?'skip':(o.coop==='yes'?'match':'possible'))}
+];
+
+document.getElementById('form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const o = {orgtype:document.getElementById('orgtype').value, state:document.getElementById('state').value, coop:document.getElementById('coop').value};
+  const results = VEHICLES.map(v=>({...v, status:v.test(o)}));
+  const matches = results.filter(r=>r.status==='match');
+  const possible = results.filter(r=>r.status==='possible');
+  const skip = results.filter(r=>r.status==='skip');
+
+  const card = (r,badgeLabel)=>`<div class="vcard ${r.status==='match'?'match':''}">
+    <div class="vhead"><h3>${r.name}</h3><span class="badge ${r.status==='match'?'match':'possible'}">${badgeLabel}</span></div>
+    <div class="contractno">Contract ${r.contract}</div>
+    <ul>${r.scope.map(s=>`<li>${s}</li>`).join('')}</ul>
+    <p>${r.elig}</p>
+    <a class="vlink" href="${r.link}" target="_blank" rel="noopener">View this vehicle on beastute.com &rarr;</a>
+  </div>`;
+
+  document.getElementById('rTitle').textContent = matches.length ? `${matches.length} contract vehicle${matches.length>1?'s':''} likely applies to you` : 'No direct match yet \u2014 here\'s what to check';
+  document.getElementById('rSub').textContent = 'Based on your organization type, location, and cooperative purchasing access.';
+
+  document.getElementById('matches').innerHTML =
+    (matches.map(r=>card(r,'Likely applies')).join('')) +
+    (possible.map(r=>card(r,'Worth checking')).join(''));
+
+  if(skip.length){
+    document.getElementById('others').innerHTML = skip.map(r=>card(r,'Not typical for your profile')).join('');
+    document.getElementById('otherWrap').style.display='block';
+  } else {
+    document.getElementById('otherWrap').style.display='none';
+  }
+
+  document.getElementById('nextSteps').innerHTML = `
+    <a href="https://www.beastute.com/en-us/contact" target="_blank" rel="noopener">Talk to Astute's public-sector team<small>Confirm current eligibility and start a procurement conversation.</small></a>
+    <a href="https://www.beastute.com/astute-business-solutions-is-now-type2-soc2-compliant" target="_blank" rel="noopener">Astute's Type 2 SOC 2 compliance<small>Security and operational diligence documentation buyers typically request.</small></a>
+    <a href="https://www.beastute.com/contract-vehicles" target="_blank" rel="noopener">See all Astute contract vehicles<small>Full detail on GSA, MHEC, TXDIR, OMNIA, and NASPO.</small></a>`;
+
+  const res = document.getElementById('results');
+  res.classList.add('show');
+  res.scrollIntoView({behavior:'smooth', block:'start'});
+});
+</script>
+</body>
+</html>
